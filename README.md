@@ -4,7 +4,7 @@
 [![.NET Standard](https://img.shields.io/badge/.NET_Standard-2.0-5c2d91?style=for-the-badge&logo=dotnet&logoColor=white)](https://mersocore.com)
 [![License](https://img.shields.io/badge/license-MIT-84cc16?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://github.com/mersolution/mersocore)
 
-> **mersolutionCore** is a lightweight, high-performance .NET ORM, fluent query builder and utility library built on **.NET Standard 2.0** — runs on both .NET Framework 4.6.1+ and .NET Core 2.0 / .NET 5–9+.
+> **mersolutionCore** is a lightweight, cross-platform ORM and fluent query builder built specifically for .NET Standard — works seamlessly on both .NET Framework and modern .NET.
 
 Explore the full documentation at [mersocore.com](https://mersocore.com).
 
