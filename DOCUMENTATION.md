@@ -1,9 +1,9 @@
 # mersolutionCore ORM Documentation
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Target Framework:** .NET Standard 2.0 / .NET Framework 4.8.1+  
 **Author:** Merso Team  
-**Last Updated:** January 2026
+**Last Updated:** August 2026
 
 ---
 
@@ -946,50 +946,35 @@ var dt = RawQuery.QueryTable("SELECT * FROM Users");
 
 ## Migrations
 
-Version-controlled database schema changes.
+Version-controlled database schema changes via `Schema` and `Migrator`.
 
 ### Creating a Migration
 
 ```csharp
+using mersolutionCore.ORM.Migration;
+
 public class CreatePostsTable : Migration
 {
-    public override void Up()
+    public override string Version => "2026_04_15_120000_create_posts";
+
+    public override void Up(Schema schema)
     {
-        CreateTable("Posts")
-            .Id()                                    // INT IDENTITY PRIMARY KEY
-            .String("Title", 200, nullable: false)   // NVARCHAR(200) NOT NULL
-            .Text("Content")                         // NVARCHAR(MAX)
-            .Int("AuthorId")                         // INT
-            .Bool("IsPublished", defaultValue: false)// BIT DEFAULT 0
-            .Decimal("Price", 18, 2)                 // DECIMAL(18,2)
-            .DateTime("PublishedAt")                 // DATETIME2
-            .Timestamps()                            // CreatedAt, UpdatedAt
-            .SoftDeletes()                           // DeletedAt
-            .ForeignKey("AuthorId", "Users")         // FK constraint
-            .Index("Title")                          // Index
-            .Build();
+        schema.CreateTable("Posts", table =>
+        {
+            table.Id();
+            table.String("Title", 200).NotNull();
+            table.Text("Content");
+            table.Integer("AuthorId");
+            table.Boolean("IsPublished");
+            table.Timestamps();
+            table.SoftDeletes();
+            table.Foreign("AuthorId", "Users");
+        });
     }
 
-    public override void Down()
+    public override void Down(Schema schema)
     {
-        DropTable("Posts");
-    }
-}
-
-public class AddPhoneToUsers : Migration
-{
-    public override void Up()
-    {
-        AlterTable("Users")
-            .String("Phone", 20)
-            .Build();
-    }
-
-    public override void Down()
-    {
-        AlterTable("Users")
-            .DropColumn("Phone")
-            .Build();
+        schema.DropTableIfExists("Posts");
     }
 }
 ```
@@ -997,22 +982,18 @@ public class AddPhoneToUsers : Migration
 ### Running Migrations
 
 ```csharp
-var runner = new MigrationRunner();
+using mersolutionCore.ORM.Migration;
+using mersolutionCore.Config;
 
-// Run all pending migrations
+var runner = new Migrator(DbConfig.CreateConnection);
+// or: new MigrationRunner() after a DbContext exists
+
+runner.Add(new CreatePostsTable());
 runner.Migrate();
-
-// Rollback last batch
 runner.Rollback();
-
-// Rollback all migrations
 runner.Reset();
-
-// Reset and re-run all
 runner.Refresh();
-
-// Show migration status
-runner.Status();
+var status = runner.Status();
 ```
 
 ---
