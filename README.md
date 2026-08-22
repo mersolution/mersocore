@@ -1,4 +1,4 @@
-# mersoCore
+# mersolutionCore
 
 [![Version](https://img.shields.io/badge/version-1.1.0-6c429c?style=for-the-badge)](https://mersocore.com)
 [![Docs](https://img.shields.io/badge/docs-mersocore.com-6c429c?style=for-the-badge&logo=gitbook&logoColor=white)](https://mersocore.com/docs/)
@@ -84,9 +84,16 @@ Or add a project reference:
 ```csharp
 using mersolutionCore.Config;
 
+// SQL Server
 DbConfig.ConfigureSqlServer(@".\SQLEXPRESS", "MyDatabase");
+
+// MySQL / MariaDB
 DbConfig.ConfigureMySQL("localhost", "mydb", "root", "password");
+
+// PostgreSQL
 DbConfig.ConfigurePostgreSQL("localhost", "mydb", "postgres", "secret");
+
+// SQLite
 DbConfig.ConfigureSQLite("./app.db");
 ```
 
@@ -187,24 +194,109 @@ var staff = User.Query()
 
 ## Supported Databases
 
-| Database | NuGet | Port | Cross-platform |
-| :--- | :--- | :--- | :---: |
-| **SQL Server** | `Microsoft.Data.SqlClient` | 1433 | ✅ |
-| **MySQL** | `MySqlConnector` | 3306 | ✅ |
-| **MariaDB** | `MySqlConnector` | 3306 | ✅ |
-| **PostgreSQL** | `Npgsql` | 5432 | ✅ |
-| **SQLite** | `Microsoft.Data.Sqlite` | — | ✅ |
+<table style="width:100%; border-collapse: collapse;">
+<thead>
+<tr style="background-color: #5c2d91; color: white;">
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Database</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">NuGet Package</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Default Port</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Cross-Platform</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>SQL Server</strong></td><td style="border:1px solid #ddd;padding:8px;"><code>Microsoft.Data.SqlClient</code></td><td style="border:1px solid #ddd;padding:8px;">1433</td><td style="border:1px solid #ddd;padding:8px;text-align:center;">✅</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>MySQL</strong></td><td style="border:1px solid #ddd;padding:8px;"><code>MySqlConnector</code></td><td style="border:1px solid #ddd;padding:8px;">3306</td><td style="border:1px solid #ddd;padding:8px;text-align:center;">✅</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>MariaDB</strong></td><td style="border:1px solid #ddd;padding:8px;"><code>MySqlConnector</code></td><td style="border:1px solid #ddd;padding:8px;">3306</td><td style="border:1px solid #ddd;padding:8px;text-align:center;">✅</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>PostgreSQL</strong></td><td style="border:1px solid #ddd;padding:8px;"><code>Npgsql</code></td><td style="border:1px solid #ddd;padding:8px;">5432</td><td style="border:1px solid #ddd;padding:8px;text-align:center;">✅</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>SQLite</strong></td><td style="border:1px solid #ddd;padding:8px;"><code>Microsoft.Data.Sqlite</code></td><td style="border:1px solid #ddd;padding:8px;">—</td><td style="border:1px solid #ddd;padding:8px;text-align:center;">✅</td></tr>
+</tbody>
+</table>
+
+---
+
+## Project Structure
+
+```
+mersolutionCore/
+├── Command/        # IDbCommand, DbFactory — SQL Server / MySQL / MariaDB / PostgreSQL / SQLite
+├── Config/         # DbConfig
+├── ORM/            # ModelBase, QueryBuilder, DbContext, MerSet<T>
+│                   #   Migration, Relationships, BulkOperations, Transactions
+│                   #   RawQuery, Observers, Events, GlobalScope, JsonColumns
+│                   #   ConnectionPool, Validation
+├── Cache/          # MemoryCache, QueryCache
+├── Http/           # HttpClientHelper, JwtHelper
+└── Library/        # Crypto, Security, TextHelper, StringExtensions
+```
+
+---
+
+## Key Features
+
+<table style="width:100%; border-collapse: collapse;">
+<thead>
+<tr style="background-color: #5c2d91; color: white;">
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Feature</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Model-First Migrations</strong></td><td style="border:1px solid #ddd;padding:8px;">Auto-create tables from model attribute definitions</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>Fluent Query Builder</strong></td><td style="border:1px solid #ddd;padding:8px;">Chainable query API — grouped OR via <code>WhereRaw("(a = 1 OR b = 2)")</code></td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Relations</strong></td><td style="border:1px solid #ddd;padding:8px;">HasOne, HasMany, BelongsTo, BelongsToMany with eager loading</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>Observers &amp; Events</strong></td><td style="border:1px solid #ddd;padding:8px;">Creating, Created, Updating, Deleting, …</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Bulk Operations</strong></td><td style="border:1px solid #ddd;padding:8px;">BulkInsert, BulkUpdate, BulkDelete, BulkUpsert</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>JSON Columns</strong></td><td style="border:1px solid #ddd;padding:8px;">JsonValue&lt;T&gt;, JsonDictionary, JsonList&lt;T&gt;</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Validation Attributes</strong></td><td style="border:1px solid #ddd;padding:8px;">[Required], [Email], [Range], [MinLength], [Url], [Phone], …</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>Connection Pool</strong></td><td style="border:1px solid #ddd;padding:8px;">ADO.NET pooling; optional <code>ConnectionPool</code> helper</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Query Cache</strong></td><td style="border:1px solid #ddd;padding:8px;">MersoCache.Remember() / query cache</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>Soft Deletes</strong></td><td style="border:1px solid #ddd;padding:8px;">[SoftDelete] — Delete(), Restore(), WithTrashed(), OnlyTrashed()</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Transactions</strong></td><td style="border:1px solid #ddd;padding:8px;">MersoTransaction.Run() / TryRun() with automatic rollback</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>Global Scopes</strong></td><td style="border:1px solid #ddd;padding:8px;">[GlobalScope] automatic WHERE filters</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>Cryptography</strong></td><td style="border:1px solid #ddd;padding:8px;">AES/TripleDES, SHA-256/MD5/HMAC</td></tr>
+</tbody>
+</table>
 
 ---
 
 ## Compatibility
 
-| Platform | Minimum |
-| :--- | :--- |
-| **.NET Standard** | 2.0 |
-| **.NET Framework** | 4.6.1+ |
-| **.NET Core** | 2.0+ |
-| **.NET** | 5, 6, 7, 8, 9+ |
+<table style="width:100%; border-collapse: collapse;">
+<thead>
+<tr style="background-color: #5c2d91; color: white;">
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Platform</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Minimum Version</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>.NET Standard</strong></td><td style="border:1px solid #ddd;padding:8px;">2.0</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>.NET Framework</strong></td><td style="border:1px solid #ddd;padding:8px;">4.6.1+</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><strong>.NET Core</strong></td><td style="border:1px solid #ddd;padding:8px;">2.0+</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><strong>.NET</strong></td><td style="border:1px solid #ddd;padding:8px;">5, 6, 7, 8, 9+</td></tr>
+</tbody>
+</table>
+
+---
+
+## Next Steps
+
+<table style="width:100%; border-collapse: collapse;">
+<thead>
+<tr style="background-color: #5c2d91; color: white;">
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Documentation</th>
+<th style="border: 1px solid #ddd; padding: 10px; text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=database-config"><strong>Database Config</strong></a></td><td style="border:1px solid #ddd;padding:8px;">Connection string and provider</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=orm-model"><strong>ORM Model</strong></a></td><td style="border:1px solid #ddd;padding:8px;">Models, attributes, relationships</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=query-builder"><strong>Query Builder</strong></a></td><td style="border:1px solid #ddd;padding:8px;">Chainable queries</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=relations"><strong>Relations</strong></a></td><td style="border:1px solid #ddd;padding:8px;">HasOne, HasMany, BelongsTo, BelongsToMany</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=dbcontext"><strong>DbContext</strong></a></td><td style="border:1px solid #ddd;padding:8px;">DbContext and MerSet&lt;T&gt;</td></tr>
+<tr style="background-color:#f9f9f9;"><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=schema-migrations"><strong>Migrations</strong></a></td><td style="border:1px solid #ddd;padding:8px;">Code-first schema</td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><a href="https://mersocore.com/docs/?doc=example-crud"><strong>CRUD Examples</strong></a></td><td style="border:1px solid #ddd;padding:8px;">End-to-end CRUD</td></tr>
+</tbody>
+</table>
 
 ---
 
