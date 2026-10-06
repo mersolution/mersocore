@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>mersocore</AssemblyName>
+    <RootNamespace>mersolutionCore.Cli</RootNamespace>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>mersocore</ToolCommandName>
+    <PackageId>mersolutionCore.Cli</PackageId>
+    <Version>2.1.0</Version>
+    <Authors>Merso</Authors>
+    <Description>Command line tool for mersolutionCore: generate model classes from an existing SQL Server, MySQL, MariaDB, PostgreSQL or SQLite database (mersocore scaffold).</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://mersocore.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mersolution/mersocore</RepositoryUrl>
+    <PackageTags>orm;scaffold;codegen;database-first;mersolutionCore</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../icon.png" Pack="true" PackagePath="\" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../mersolutionCore.csproj" />
+  </ItemGroup>
+
+</Project>

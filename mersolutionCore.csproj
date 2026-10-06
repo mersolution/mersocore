@@ -1,0 +1,89 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <RootNamespace>mersolutionCore</RootNamespace>
+    <AssemblyName>mersolutionCore</AssemblyName>
+    <Version>2.1.0</Version>
+    <Authors>Merso</Authors>
+    <Description>Cross-platform .NET ORM for SQL Server, MySQL, MariaDB, PostgreSQL and SQLite: Active Record models, fluent queries, async API, multiple databases, migrations, change tracking, optimistic concurrency, upsert, retry of transient errors, distributed cache and dependency injection. Targets .NET Standard 2.0 (.NET Framework 4.6.1+) and .NET 8+.</Description>
+    <LangVersion>latest</LangVersion>
+    <PackageId>mersolutionCore</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://mersocore.com</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.nuget.md</PackageReadmeFile>
+    <PackageReleaseNotes>See CHANGELOG.md: https://github.com/mersolution/mersocore/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/mersolution/mersocore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>orm;micro-orm;active-record;sql;database;sqlserver;mysql;mariadb;postgresql;sqlite;migrations;async;query-builder;dotnet</PackageTags>
+    <Copyright>Copyright (c) 2026 Merso</Copyright>
+
+    <!-- IntelliSense: the XML documentation goes into the package -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- Nullable reference annotations for callers -->
+    <Nullable>enable</Nullable>
+
+    <!-- Source Link (built into the .NET 8+ SDK): step into the GitHub sources while debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- tests/ and tools/ are separate projects -->
+  <ItemGroup>
+    <Compile Remove="tests/**;tools/**" />
+    <None Remove="tests/**;tools/**" />
+    <EmbeddedResource Remove="tests/**;tools/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+    <None Include="README.nuget.md" Pack="true" PackagePath="\" />
+    <None Include="CHANGELOG.md" Pack="true" PackagePath="\" />
+    <None Include="LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!--
+    Version notes:
+    - netstandard2.0 (.NET Framework 4.6.1+, .NET Core 2.0+) must keep a real implementation, not a reference stub:
+      Microsoft.Data.SqlClient stays on 5.2.x (6.x/7.x ship only a netstandard2.0 stub) and Npgsql on 8.0.x
+      (9.x and 10.x dropped netstandard2.0). Microsoft.Extensions.* 8.0 match Npgsql 8.
+    - net8.0 (.NET 8, 9, 10 apps) gets the current drivers; Npgsql 10 already needs Microsoft.Extensions.* 10.
+  -->
+  <ItemGroup>
+    <PackageReference Include="MySqlConnector" Version="2.6.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.3" />
+    <PackageReference Include="Npgsql" Version="8.0.9" />
+    <PackageReference Include="System.Text.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.3" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <PackageReference Include="Npgsql" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.12" />
+  </ItemGroup>
+
+</Project>
