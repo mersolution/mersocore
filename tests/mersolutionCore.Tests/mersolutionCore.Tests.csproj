@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1998</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <!-- AddMersoCore test: a real ServiceCollection and LoggerFactory -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+  </ItemGroup>
+
+  <!-- Default: the library's net8.0 build. dotnet test -p:LibTfm=ns tests the netstandard2.0 build. -->
+  <ItemGroup Condition="'$(LibTfm)' != 'ns'">
+    <ProjectReference Include="..\..\mersolutionCore.csproj" />
+  </ItemGroup>
+
+  <!-- Restore does not follow SetTargetFramework: pin the netstandard2.0 package set explicitly -->
+  <ItemGroup Condition="'$(LibTfm)' == 'ns'">
+    <ProjectReference Include="..\..\mersolutionCore.csproj" SetTargetFramework="TargetFramework=netstandard2.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.3" />
+    <PackageReference Include="Npgsql" Version="8.0.9" />
+    <PackageReference Include="System.Text.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.3" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(LibTfm)' == 'ns'">
+    <NoWarn>$(NoWarn);NU1605;NU1510</NoWarn>
+  </PropertyGroup>
+
+</Project>

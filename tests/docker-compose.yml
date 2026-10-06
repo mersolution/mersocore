@@ -1,0 +1,28 @@
+# Throwaway test databases (same passwords and ports as the GitHub Actions CI)
+#   docker compose -f tests/docker-compose.yml up -d
+#   docker compose -f tests/docker-compose.yml down
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Merso_test_1!"
+    ports: ["127.0.0.1:1433:1433"]
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: "merso_test"
+    ports: ["127.0.0.1:3306:3306"]
+
+  mariadb:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: "merso_test"
+    ports: ["127.0.0.1:3307:3306"]
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: "merso_test"
+    ports: ["127.0.0.1:5432:5432"]
